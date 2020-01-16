@@ -15,7 +15,9 @@ const customErrors = (err, req, res, next) => {
 const psqlErrors = (err, req, res, next) => {
   if (err.code) {
     const errorRef = {
-      "22P02": [400, "Sorry, invalid data type given"]
+      "22P02": [400, "Sorry, invalid data type given"],
+      "42703": [404, "Sorry, column does not exist"],
+      "23503": [404, "Sorry, invalid input"]
     };
     const [status, message] = errorRef[err.code];
     res.status(status).send({ msg: message });

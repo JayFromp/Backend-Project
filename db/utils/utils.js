@@ -1,3 +1,4 @@
+const connection = require("../utils/connection");
 exports.formatDates = list => {
   const newList = [];
   list.forEach(article => {
@@ -35,4 +36,27 @@ exports.formatComments = (comments, articleRef) => {
     //
     return newComment;
   });
+};
+
+exports.checkArticleExists = articleId => {
+  return connection
+    .select("*")
+    .from("articles")
+    .where("article_id", articleId)
+    .then(articleArray => {
+      return articleArray.length > 0 ? true : false;
+    });
+};
+
+exports.checkQueryExists = (table, column, value) => {
+  return connection
+    .select("*")
+    .from(table)
+    .where(column, value)
+    .then(response => {
+      if (response.length !== 0) {
+        return true;
+      }
+      return false;
+    });
 };
