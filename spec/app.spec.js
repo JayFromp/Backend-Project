@@ -64,7 +64,7 @@ describe("/api", () => {
   });
   describe("/users", () => {
     describe(" - get user by username", () => {
-      it("GET: 200 - returns a specific user based on a given username parameter", () => {
+      it("GET: 200 - returns  specific user based on a given username parameter", () => {
         return request(app)
           .get("/api/users/butter_bridge")
           .expect(200)
@@ -275,8 +275,8 @@ describe("/api", () => {
         });
       });
     });
-    describe("- patch article", () => {
-      it("PATCH: 200 - successfully amends articles.votes by a given amount ", () => {
+    describe.only("- patch article", () => {
+      it.only("PATCH: 200 - successfully amends articles.votes by a given amount ", () => {
         return request(app)
           .patch("/api/articles/1")
           .send({ inc_votes: 1 })

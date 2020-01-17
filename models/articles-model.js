@@ -66,7 +66,7 @@ const fetchArticleById = id => {
     });
 };
 
-const changeArticle = (id, changeVotesBy) => {
+const changeArticle = (id, changeVotesBy = 0) => {
   return connection
     .select("*")
     .from("articles")

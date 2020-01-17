@@ -1,5 +1,5 @@
 const badPath = (req, res, next) => {
-  res.status(400).send({ msg: "Page Not Found" });
+  res.status(404).send({ msg: "Page Not Found" });
 };
 
 const badMethod = (req, res, next) => {
