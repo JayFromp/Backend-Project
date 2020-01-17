@@ -37,6 +37,20 @@
       ]
     }
   },
+  "GET /api/articles/:article_id": {
+    "description": "servers an array containing a specified articles details",
+    "queries": [],
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341}
+      ]
+    }
+  }
 }
 
 TEMPLATE 

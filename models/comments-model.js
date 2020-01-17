@@ -43,10 +43,8 @@ const addComment = (id, reqBody) => {
 };
 
 const changeComment = (id, changeVotesBy = 0) => {
-  return connection
-    .select("*")
-    .from("comments")
-    .where("article_id", id)
+  return connection("comments")
+    .where("comment_id", id)
     .increment("votes", changeVotesBy)
     .returning("*")
     .then(comment => {
