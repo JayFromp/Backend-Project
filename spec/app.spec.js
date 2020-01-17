@@ -510,16 +510,16 @@ describe("/api", () => {
               "created_at",
               "votes"
             );
-            expect(response.body.comment.votes).to.equal(16);
+            expect(response.body.comment.votes).to.equal(18);
           });
       });
-      it("PATCH: 200 - returns the same number of votes on a comment if sent an empty object", () => {
+      it.only("PATCH: 200 - returns the same number of votes on a comment if sent an empty object", () => {
         return request(app)
           .patch("/api/comments/1")
           .send({})
           .expect(200)
           .then(response => {
-            expect(response.body.comment.votes).to.equal(14);
+            expect(response.body.comment.votes).to.equal(16);
           });
       });
       it("PATCH: 404 - returns an error if a valid, but non-existent id is used", () => {
