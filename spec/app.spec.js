@@ -27,10 +27,10 @@ describe("/api", () => {
       });
     });
   });
-  it("GET: 400 - route not found. Returns an error if api is followed by an invalid path is used", () => {
+  it("GET: 404 - route not found. Returns an error if api is followed by an invalid path is used", () => {
     return request(app)
       .get("/api/wrongPath")
-      .expect(400)
+      .expect(404)
       .then(response => {
         expect(response.body.msg).to.equal("Page Not Found");
       });
@@ -275,8 +275,8 @@ describe("/api", () => {
         });
       });
     });
-    describe.only("- patch article", () => {
-      it.only("PATCH: 200 - successfully amends articles.votes by a given amount ", () => {
+    describe("- patch article", () => {
+      it("PATCH: 200 - successfully amends articles.votes by a given amount ", () => {
         return request(app)
           .patch("/api/articles/1")
           .send({ inc_votes: 1 })
@@ -404,7 +404,7 @@ describe("/api", () => {
       it("GET: 404 - returns an error if an invalid path is used", () => {
         return request(app)
           .get("/api/articles/1/commentz")
-          .expect(400)
+          .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal("Page Not Found");
           });
