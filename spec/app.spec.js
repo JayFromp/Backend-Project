@@ -8,12 +8,24 @@ const request = require("supertest");
 const connection = require("../db/utils/connection");
 
 describe("/api", () => {
-  // wrong path? E.G /APZ
   beforeEach(() => {
     return connection.seed.run();
   });
   after(() => {
     return connection.destroy();
+  });
+  it("METHOD: 405 - returns an error if an invalid method is used", () => {
+    const methods = ["post", "patch", "put", "delete"];
+    const promises = methods.map(method => {
+      return request(app)
+        [method]("/api")
+        .expect(405);
+    });
+    return Promise.all(promises).then(responses => {
+      responses.forEach(response => {
+        expect(response.body.msg).to.equal("Method Not Allowed");
+      });
+    });
   });
   it("GET: 400 - route not found. Returns an error if api is followed by an invalid path is used", () => {
     return request(app)
@@ -38,12 +50,13 @@ describe("/api", () => {
       it("METHOD: 405 - bad method. Returns an error if a invalid method is used", () => {
         const methods = ["post", "patch", "put", "delete"];
         const promises = methods.map(method => {
-          return request(app)[method]("/api/topics");
+          return request(app)
+            [method]("/api/topics")
+            .expect(405);
         });
         return Promise.all(promises).then(responses => {
           responses.forEach(response => {
             expect(response.body.msg).to.equal("Method Not Allowed");
-            expect(response.status).to.equal(405);
           });
         });
       });
@@ -56,28 +69,28 @@ describe("/api", () => {
           .get("/api/users/butter_bridge")
           .expect(200)
           .then(response => {
-            const user = response.body.user[0];
+            const user = response.body.user;
             expect(user).to.have.keys("username", "name", "avatar_url");
             expect(user.username).to.equal("butter_bridge");
           });
       });
-      it("GET: 400 - returns an error if an invalid username is given", () => {
+      it("GET: 404 - returns an error if an invalid username is given", () => {
         return request(app)
           .get("/api/users/butterz_road")
-          .expect(400)
+          .expect(404)
           .then(response => {
-            expect(response.status).to.equal(400);
             expect(response.body.msg).to.equal("username does not exist");
           });
       });
       it("METHOD: 405 - bad method. returns an error if an invalid method is used", () => {
         const methods = ["post", "patch", "put", "delete"];
         const promises = methods.map(method => {
-          return request(app)[method]("/api/users/butter_bridge");
+          return request(app)
+            [method]("/api/users/butter_bridge")
+            .expect(405);
         });
         return Promise.all(promises).then(responses => {
           responses.forEach(response => {
-            expect(response.status).to.equal(405);
             expect(response.body.msg).to.eql("Method Not Allowed");
           });
         });
@@ -120,7 +133,7 @@ describe("/api", () => {
         );
       });
     });
-    describe.only("- query articles", () => {
+    describe("- query articles", () => {
       it("QUERY: 200 - returns all articles sorted by date, in descending order", () => {
         return request(app)
           .get("/api/articles")
@@ -144,18 +157,18 @@ describe("/api", () => {
           .get("/api/articles?sort_by=title&order=asc&author=butter_bridge")
           .expect(200)
           .then(response => {
-            response.body.articles.forEach(article => {
+            response.body.articles.every(article => {
               expect(article.author).to.equal("butter_bridge");
             });
           });
       });
       it("QUERY: 200 - returns all articles filtered by a specified topic", () => {
         return request(app)
-          .get("/api/articles?sort_by=title&order=asc&topic='mitch'")
+          .get("/api/articles?sort_by=title&order=asc&topic=mitch")
           .expect(200)
           .then(response => {
             response.body.articles.forEach(article => {
-              expect(article.author).to.equal("butter_bridge");
+              expect(article.topic).to.equal("mitch");
             });
           });
       });
@@ -167,10 +180,10 @@ describe("/api", () => {
             expect(response.body.articles).to.be.ascendingBy("title");
           });
       });
-      it("QUERY: 404 - returns an error if sorted by an invalid topic", () => {
+      it("QUERY: 400 - returns an error if sorted by an invalid topic", () => {
         return request(app)
           .get("/api/articles?sort_by=wrongInput&order=asc")
-          .expect(404)
+          .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal("Sorry, column does not exist");
           });
@@ -183,19 +196,33 @@ describe("/api", () => {
             expect(response.body.articles).to.eql([]);
           });
       });
-      //
-      it.only("QUERY: 200 - returns an empty array if topic does exist, but has no articles", () => {
+
+      it("QUERY: 200 - returns an empty array if topic does exist, but has no articles", () => {
         return request(app)
-          .get("/api/articles?topic=football")
+          .get("/api/articles?topic=paper")
           .expect(200)
           .then(response => {
             expect(response.body.articles).to.eql([]);
           });
       });
-      //
-      xit("QUERY: 404 - returns an error if topic does not exist", () => {});
-      //
-      xit('QUERY: 400 - returns an error if topic does exist, but has no articles"', () => {});
+
+      it("QUERY: 404 - returns an error if topic does not exist", () => {
+        return request(app)
+          .get("/api/articles?topic=NotATopic")
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.eql("input does not exist.");
+          });
+      });
+
+      it("QUERY: 404 - returns an error if author does not exist", () => {
+        return request(app)
+          .get("/api/articles?author=NotAnAuthor")
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.eql("input does not exist.");
+          });
+      });
     });
     describe("- get article by ID", () => {
       it("GET: 200 - returns an article with a specified Id", () => {
@@ -249,11 +276,11 @@ describe("/api", () => {
       });
     });
     describe("- patch article", () => {
-      it("PATCH: 201 - successfully amends articles.votes by a given amount ", () => {
+      it("PATCH: 200 - successfully amends articles.votes by a given amount ", () => {
         return request(app)
           .patch("/api/articles/1")
           .send({ inc_votes: 1 })
-          .expect(201)
+          .expect(200)
           .then(response => {
             const votes = response.body.article.votes;
             expect(votes).to.equal(101);
@@ -308,6 +335,17 @@ describe("/api", () => {
             );
           });
       });
+      it("POST: 400 - returns an error when a post does not have all the required keys", () => {
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send({ username: "butter_bridge" })
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal(
+              "Sorry, missing required inputs"
+            );
+          });
+      });
       it("POST: 404 - returns an error when an invalid-data type is given", () => {
         return request(app)
           .post("/api/articles/1/comments")
@@ -344,14 +382,6 @@ describe("/api", () => {
   });
   describe("/comments", () => {
     describe("- get comments", () => {
-      it("GET: 404 - returns an error if an invalid path is used", () => {
-        return request(app)
-          .get("/api/articles/1/commentz")
-          .expect(400)
-          .then(response => {
-            expect(response.body.msg).to.equal("Page Not Found");
-          });
-      });
       it("GET: 200 - gets all comments for a specified article", () => {
         return request(app)
           .get("/api/articles/1/comments")
@@ -361,6 +391,22 @@ describe("/api", () => {
             response.body.comments.forEach(obj =>
               expect(obj.article_id).to.equal(1)
             );
+          });
+      });
+      it("GET: 200 - returns an empty array if an article exists, but has no comments", () => {
+        return request(app)
+          .get("/api/articles/2/comments")
+          .expect(200)
+          .then(response => {
+            expect(response.body.comments).to.eql([]);
+          });
+      });
+      it("GET: 404 - returns an error if an invalid path is used", () => {
+        return request(app)
+          .get("/api/articles/1/commentz")
+          .expect(400)
+          .then(response => {
+            expect(response.body.msg).to.equal("Page Not Found");
           });
       });
       it("GET: 404 - returns an error if a valid, but non-existent id is used ", () => {
@@ -374,11 +420,9 @@ describe("/api", () => {
       it("GET: 204 - returns an error if a valid article id is given, which has no comments", () => {
         return request(app)
           .get("/api/articles/2/comments")
-          .expect(404)
+          .expect(200)
           .then(response => {
-            expect(response.body.msg).to.equal(
-              "Sorry, this article has no comments yet"
-            );
+            expect(response.body.comments).to.eql([]);
           });
       });
       it("GET: 400 - returns an error if a non-existent article id is used", () => {
@@ -425,20 +469,29 @@ describe("/api", () => {
             expect(response.body.comments).to.be.ascendingBy("author");
           });
       });
-      it("QUERY: 404 - returns an error when sorted by an non-existent input", () => {
+      it("QUERY: 400 - returns an error when sorted by an non-existent input", () => {
         return request(app)
           .get("/api/articles/1/comments?sort_by=red&order=asc")
-          .expect(404)
+          .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal("Sorry, column does not exist");
           });
       });
-      it("QUERY: 404 - returns an error when sorted by an invalid input", () => {
+      it("QUERY: 400 - returns an error when sorted by an invalid input", () => {
         return request(app)
           .get("/api/articles/1/comments?sort_by=red&order=red")
-          .expect(404)
+          .expect(400)
           .then(response => {
             expect(response.body.msg).to.equal("Sorry, column does not exist");
+          });
+      });
+      it("METHOD: 405 - returns an error when an invalid method is used", () => {
+        return request(app)
+          .put("/api/articles/1/comments")
+          .send({ inc_votes: 2 })
+          .expect(405)
+          .then(response => {
+            expect(response.body.msg).to.equal("Method Not Allowed");
           });
       });
     });
@@ -447,7 +500,7 @@ describe("/api", () => {
         return request(app)
           .patch("/api/comments/1")
           .send({ inc_votes: 2 })
-          .expect(201)
+          .expect(200)
           .then(response => {
             expect(response.body.comment).to.have.keys(
               "article_id",
@@ -460,11 +513,20 @@ describe("/api", () => {
             expect(response.body.comment.votes).to.equal(16);
           });
       });
-      it("PATCH: 400 - returns an error if a valid, but non-existent id is used", () => {
+      it("PATCH: 200 - returns the same number of votes on a comment if sent an empty object", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({})
+          .expect(200)
+          .then(response => {
+            expect(response.body.comment.votes).to.equal(14);
+          });
+      });
+      it("PATCH: 404 - returns an error if a valid, but non-existent id is used", () => {
         return request(app)
           .patch("/api/comments/999")
           .send({ inc_votes: 2 })
-          .expect(400)
+          .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal("invalid comment id");
           });
@@ -500,10 +562,10 @@ describe("/api", () => {
           .delete("/api/comments/1")
           .expect(204);
       });
-      it("DELETE: 400 - returns an error if a valid, but non-existent id is used ", () => {
+      it("DELETE: 404 - returns an error if a valid, but non-existent id is used ", () => {
         return request(app)
           .delete("/api/comments/999")
-          .expect(400)
+          .expect(404)
           .then(response => {
             expect(response.body.msg).to.equal("comment id does not exist");
           });

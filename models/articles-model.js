@@ -32,20 +32,20 @@ const fetchArticles = (
     .then(articles => {
       return articles;
     });
-  //
-  //
+
   return Promise.all([doesTopicExist, doesAuthorExist, articlesRequest]).then(
     ([doesTopicExist, doesAuthorExist, articles]) => {
       if (doesAuthorExist === null && doesTopicExist == null) {
         return articles;
       }
-      if (doesTopicExist === false) {
+
+      if (doesTopicExist) {
         return articles;
       }
       if (doesAuthorExist) {
         return articles;
-      }
-      return Promise.reject({ status: 404, msg: "x" });
+      } else
+        return Promise.reject({ status: 404, msg: "input does not exist." });
     }
   );
 };
@@ -83,10 +83,5 @@ const changeArticle = (id, changeVotesBy) => {
       return articles[0];
     });
 };
-
-// check articles isn't empty
-// send err to controller
-// controller sends to error.js
-// custom error sent to user
 
 module.exports = { fetchArticles, fetchArticleById, changeArticle };

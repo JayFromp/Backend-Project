@@ -34,31 +34,22 @@ const patchComment = (req, res, next) => {
   const { inc_votes } = req.body;
   changeComment(comment_id, inc_votes)
     .then(comment => {
-      res.status(201).send({ comment });
+      res.status(200).send({ comment });
     })
     .catch(err => {
       next(err);
     });
 };
+
 const deleteComment = (req, res, next) => {
   const { comment_id } = req.params;
   removeComment(comment_id)
-    .then(noOfDeletedComments => {
-      if (noOfDeletedComments === 0) {
-        return Promise.reject({
-          status: 400,
-          msg: "comment id does not exist"
-        });
-      } else res.sendStatus(204);
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch(err => {
       next(err);
     });
 };
-//
 
 module.exports = { getComments, postComment, patchComment, deleteComment };
-
-// valid but non existant id
-//invalid id
-// inc-votes given a weird alue

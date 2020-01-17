@@ -7,23 +7,16 @@ const fetchComments = (articleId, sortBy = "created_at", order = "desc") => {
     .from("comments")
     .where("article_id", articleId)
     .orderBy(sortBy, order);
+
   const trueOrFalse = checkArticleExists(articleId);
-  //
+
   return Promise.all([allComments, trueOrFalse]).then(
     ([comments, trueOrFalse]) => {
-      //
       if (!comments.length && trueOrFalse === false) {
         return Promise.reject({
           status: 404,
           msg: "Sorry, invalid article id"
         });
-      } else {
-        if (!comments.length && trueOrFalse === true) {
-          return Promise.reject({
-            status: 404,
-            msg: "Sorry, this article has no comments yet"
-          });
-        }
       }
       return comments;
     }
@@ -49,7 +42,7 @@ const addComment = (id, reqBody) => {
     });
 };
 
-const changeComment = (id, changeVotesBy) => {
+const changeComment = (id, changeVotesBy = 0) => {
   return connection
     .select("*")
     .from("comments")
@@ -58,7 +51,7 @@ const changeComment = (id, changeVotesBy) => {
     .returning("*")
     .then(comment => {
       if (!comment.length) {
-        return Promise.reject({ status: 400, msg: "invalid comment id" });
+        return Promise.reject({ status: 404, msg: "invalid comment id" });
       }
       return comment[0];
     });
@@ -69,8 +62,13 @@ const removeComment = commentId => {
     .del()
     .from("comments")
     .where("comments.comment_id", commentId)
-    .then(response => {
-      return response;
+    .then(noOfDeletedComments => {
+      if (noOfDeletedComments === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "comment id does not exist"
+        });
+      } else return noOfDeletedComments;
     });
 };
 

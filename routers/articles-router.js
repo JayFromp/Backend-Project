@@ -27,7 +27,8 @@ articlesRouter
 articlesRouter
   .route("/:article_id/comments")
   .get(getComments)
-  .post(postComment);
+  .post(postComment)
+  .all(badMethod);
 
 articlesRouter.use("/:article_id/*", badPath);
 

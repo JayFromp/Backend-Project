@@ -1,14 +1,12 @@
 const connection = require("../utils/connection");
 exports.formatDates = list => {
-  const newList = [];
-  list.forEach(article => {
+  return list.map(article => {
     const newArticle = { ...article };
     if (newArticle.hasOwnProperty("created_at")) {
       newArticle.created_at = new Date(newArticle.created_at);
+      return newArticle;
     }
-    newList.push(newArticle);
   });
-  return newList;
 };
 
 exports.makeRefObj = (arr, key, value) => {
@@ -25,15 +23,15 @@ exports.makeRefObj = (arr, key, value) => {
 exports.formatComments = (comments, articleRef) => {
   return comments.map(comment => {
     const newComment = { ...comment };
-    //
+
     newComment["article_id"] = articleRef[newComment.belongs_to];
     delete newComment["belongs_to"];
-    //
+
     newComment["author"] = newComment["created_by"];
     delete newComment["created_by"];
-    //
+
     newComment["created_at"] = new Date(newComment.created_at);
-    //
+
     return newComment;
   });
 };

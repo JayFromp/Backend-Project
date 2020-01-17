@@ -33,7 +33,7 @@ const patchArticle = (req, res, next) => {
   const { inc_votes } = req.body;
   changeArticle(article_id, inc_votes)
     .then(article => {
-      res.status(201).send({ article });
+      res.status(200).send({ article });
     })
     .catch(err => {
       next(err);
