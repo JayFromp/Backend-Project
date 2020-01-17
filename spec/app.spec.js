@@ -513,7 +513,7 @@ describe("/api", () => {
             expect(response.body.comment.votes).to.equal(18);
           });
       });
-      it.only("PATCH: 200 - returns the same number of votes on a comment if sent an empty object", () => {
+      it("PATCH: 200 - returns the same number of votes on a comment if sent an empty object", () => {
         return request(app)
           .patch("/api/comments/1")
           .send({})
