@@ -10,12 +10,26 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
           "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341
+        },
+        {
+          "title": "Another article",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341
+        },
+        {
+          "title": "Yet another article",
           "topic": "cooking",
           "author": "weegembump",
           "body": "Text from the article..",
@@ -41,25 +55,83 @@
     "description": "servers an array containing a specified articles details",
     "queries": [],
     "exampleResponse": {
-      "articles": [
+      "article": [
         {
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
           "author": "weegembump",
           "body": "Text from the article..",
-          "created_at": 1527695953341}
+          "created_at": 1527695953341
+        }
       ]
     }
-  }
-}
-
-TEMPLATE 
-"GET /api/users/:username": {
- "description": "",
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "adds a new article to the article database",
     "queries": [],
     "exampleResponse": {
-      "articles": [
-        {}
+      "article": [
+        {
+          "title": "Hello, a new article",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the new article..",
+          "created_at": 1527695953341
+        }
       ]
     }
+  },
+  "GET /api/articles/:article_id/comments/": {
+    "description": "gets all comments from a specified article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 18,
+          "author": "butter_bridge",
+          "article_id": 1,
+          "votes": 16,
+          "created_at": "2000-11-26T12: 36: 03.389Z",
+          "body": "This morning, I showered for nine minutes."
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds a new comment to a specified article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 18,
+          "author": "butter_bridge",
+          "article_id": 1,
+          "votes": 5,
+          "created_at": "2000-11-26T12: 36: 03.389Z",
+          "body": "Hello, i'm posting a new comment"
+        }
+      ]
+    }
+  },
+  "PATCH /api/comments/comment_id": {
+    "description": "adds or removes a vote to a specified comment",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 18,
+          "author": "butter_bridge",
+          "article_id": 1,
+          "votes": 17,
+          "created_at": "2000-11-26T12: 36: 03.389Z",
+          "body": "This morning, I showered for nine minutes."
+        }
+      ]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a specified comment from the database",
+    "queries": [],
+    "exampleResponse": {}
   }
+}

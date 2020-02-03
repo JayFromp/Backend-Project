@@ -14,6 +14,14 @@ describe("/api", () => {
   after(() => {
     return connection.destroy();
   });
+  it.only("GET: 200 - returns a JSON describing all available endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(response => {
+        expect(response.body.endpointsJSON).to.be.an("object");
+      });
+  });
   it("METHOD: 405 - returns an error if an invalid method is used", () => {
     const methods = ["post", "patch", "put", "delete"];
     const promises = methods.map(method => {
@@ -325,6 +333,7 @@ describe("/api", () => {
           .send({ username: "butter_bridge", body: "When is lunch?" })
           .expect(201)
           .then(response => {
+            console.log();
             expect(response.body.comment).to.have.keys(
               "body",
               "article_id",
@@ -387,6 +396,7 @@ describe("/api", () => {
           .get("/api/articles/1/comments")
           .expect(200)
           .then(response => {
+            console.log(response.body.comments);
             expect(response.body.comments).to.be.an("array");
             response.body.comments.forEach(obj =>
               expect(obj.article_id).to.equal(1)
