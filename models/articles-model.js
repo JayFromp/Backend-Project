@@ -84,4 +84,24 @@ const changeArticle = (id, changeVotesBy = 0) => {
     });
 };
 
-module.exports = { fetchArticles, fetchArticleById, changeArticle };
+const addArticle = reqBody => {
+  const { title, body, topic, author } = reqBody;
+
+  const newArticle = {
+    title: title,
+    body: body,
+    topic: topic,
+    author: author
+  };
+  console.log("before then then");
+
+  return connection
+    .insert(newArticle)
+    .into("articles")
+    .returning("*")
+    .then(addedComment => {
+      return addedComment;
+    });
+};
+
+module.exports = { fetchArticles, fetchArticleById, changeArticle, addArticle };

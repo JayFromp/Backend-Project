@@ -1,7 +1,8 @@
 const {
   fetchArticles,
   fetchArticleById,
-  changeArticle
+  changeArticle,
+  addArticle
 } = require("../models/articles-model");
 
 const getArticles = (req, res, next) => {
@@ -40,4 +41,24 @@ const patchArticle = (req, res, next) => {
     });
 };
 
-module.exports = { getArticles, getArticleById, patchArticle };
+const postArticle = (req, res, next) => {
+  addArticle(req.body)
+    .then(newArticle => {
+      res.status(201).send({ newArticle });
+    })
+    .catch(err => {
+      console.log(err);
+
+      next(err);
+    });
+};
+
+module.exports = { getArticles, getArticleById, patchArticle, postArticle };
+
+// s("article_id").primary;
+// articlesTable.string("title").notNullable();
+// articlesTable.text("body").notNullable();
+// articlesTable.integer("votes").defaultTo(0);
+// articlesTable.string("topic").references("topics.slug");
+// articlesTable.string("author").references("users.username");
+// articlesTable.timestamp("created_at").defaultTo(knex.fn.now());

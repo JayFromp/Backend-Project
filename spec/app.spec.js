@@ -14,7 +14,7 @@ describe("/api", () => {
   after(() => {
     return connection.destroy();
   });
-  it.only("GET: 200 - returns a JSON describing all available endpoints", () => {
+  it("GET: 200 - returns a JSON describing all available endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
@@ -127,8 +127,32 @@ describe("/api", () => {
             );
           });
       });
+      describe("- post new article", () => {
+        it("POST: 201 - successfully creates a new article", () => {
+          return request(app)
+            .post("/api/articles")
+            .send({
+              title: "test article",
+              body: "test body",
+              topic: "mitch",
+              author: "butter_bridge"
+            })
+            .expect(201)
+            .then(response => {
+              expect(response.body.newArticle[0]).to.have.keys(
+                "article_id",
+                "title",
+                "body",
+                "votes",
+                "topic",
+                "author",
+                "created_at"
+              );
+            });
+        });
+      });
       it("METHODS: 405 - returns an error when a bad method is used", () => {
-        const methods = ["delete", "post", "put"];
+        const methods = ["delete", "put"];
         const promises = methods.map(method => {
           return request(app)
             [method]("/api/articles")

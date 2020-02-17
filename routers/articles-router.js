@@ -8,7 +8,8 @@ const {
 const {
   getArticles,
   getArticleById,
-  patchArticle
+  patchArticle,
+  postArticle
 } = require("../controllers/articles-controller");
 
 const { badMethod, badPath } = require("../errors");
@@ -16,6 +17,7 @@ const { badMethod, badPath } = require("../errors");
 articlesRouter
   .route("/")
   .get(getArticles)
+  .post(postArticle)
   .all(badMethod);
 
 articlesRouter
