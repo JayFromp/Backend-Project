@@ -93,7 +93,6 @@ const addArticle = reqBody => {
     topic: topic,
     author: author
   };
-  console.log("before then then");
 
   return connection
     .insert(newArticle)
@@ -104,4 +103,22 @@ const addArticle = reqBody => {
     });
 };
 
-module.exports = { fetchArticles, fetchArticleById, changeArticle, addArticle };
+const removeArticle = articleId => {
+  return connection
+    .del()
+    .from("articles")
+    .where("articles.article_id", articleId)
+    .then(noOfDeletedArticles => {
+      if (noOfDeletedArticles === 0) {
+        return Promise.reject({ status: 404, msg: "article does not exist" });
+      } else return noOfDeletedArticles;
+    });
+};
+
+module.exports = {
+  fetchArticles,
+  fetchArticleById,
+  changeArticle,
+  addArticle,
+  removeArticle
+};

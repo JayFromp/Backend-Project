@@ -38,6 +38,24 @@
       ]
     }
   },
+  "DELETE /api/articles/:article_id": {
+    "description": "deletes a specified article from the database",
+    "queries": [],
+    "exampleResponse": {}
+  },
+  "POST /api/articles": {
+    "description": "posts a new article to the database",
+    "queries": [],
+    "exampleResponse": {
+      "articles": {
+        "title": "New Article",
+        "topic": "cooking",
+        "author": "weegembump",
+        "body": "Text from the new article..",
+        "created_at": 1527695953341
+      }
+    }
+  },
   "GET /api/users/:username": {
     "description": "serves an array containing a specified users details",
     "queries": [],
@@ -47,6 +65,34 @@
           "username": "butter_bridge",
           "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
           "name": "jonny"
+        }
+      ]
+    }
+  },
+  "GET /api/users/": {
+    "description": "serves an array containing all user details",
+    "queries": [],
+    "exampleResponse": {
+      "user": [
+        {
+          "username": "butter_bridge",
+          "avatar_url": "https: //www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+          "name": "jonny"
+        },
+        {
+          "username": "icellusedkars",
+          "avatar_url": "https: //avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+          "name": "sam"
+        },
+        {
+          "username": "rogersop",
+          "avatar_url": "https: //avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+          "name": "paul"
+        },
+        {
+          "username": "lurker",
+          "avatar_url": "https: //www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          "name": "do_nothing"
         }
       ]
     }

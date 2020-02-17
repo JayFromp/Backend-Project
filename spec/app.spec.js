@@ -71,7 +71,17 @@ describe("/api", () => {
     });
   });
   describe("/users", () => {
-    describe(" - get user by username", () => {
+    describe("- get users", () => {
+      it("returns an array of all users", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(response => {
+            expect(response.body.users).to.be.an("array");
+          });
+      });
+    });
+    describe(" - get specific user ", () => {
       it("GET: 200 - returns  specific user based on a given username parameter", () => {
         return request(app)
           .get("/api/users/butter_bridge")
@@ -256,7 +266,7 @@ describe("/api", () => {
           });
       });
     });
-    describe("- get article by ID", () => {
+    describe("- get specific article", () => {
       it("GET: 200 - returns an article with a specified Id", () => {
         return request(app)
           .get("/api/articles/1")
@@ -305,6 +315,21 @@ describe("/api", () => {
             expect(response.body.msg).to.equal("Method Not Allowed");
           });
         });
+      });
+    });
+    describe("- delete specific article", () => {
+      it("successfully deletes an article", () => {
+        return request(app)
+          .delete("/api/articles/1")
+          .expect(204);
+      });
+      it("returns an error when an delete request is made on an article id which doesnt exist", () => {
+        return request(app)
+          .delete("/api/articles/999")
+          .expect(404)
+          .then(response => {
+            expect(response.body.msg).to.equal("article does not exist");
+          });
       });
     });
     describe("- patch article", () => {
@@ -357,7 +382,6 @@ describe("/api", () => {
           .send({ username: "butter_bridge", body: "When is lunch?" })
           .expect(201)
           .then(response => {
-            console.log();
             expect(response.body.comment).to.have.keys(
               "body",
               "article_id",
@@ -420,7 +444,6 @@ describe("/api", () => {
           .get("/api/articles/1/comments")
           .expect(200)
           .then(response => {
-            console.log(response.body.comments);
             expect(response.body.comments).to.be.an("array");
             response.body.comments.forEach(obj =>
               expect(obj.article_id).to.equal(1)
