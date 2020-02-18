@@ -3,34 +3,35 @@ module.exports = [
     username: "tickle122",
     name: "Tom Tickle",
     avatar_url:
-      "https://www.spiritsurfers.net/monastery/wp-content/uploads/_41500270_mrtickle.jpg"
+      "https://img.favpng.com/13/18/14/hey-arnold-helga-g-pataki-olga-pataki-nickelodeon-png-favpng-7t6grzv78RvR2ScQpauUVe4Zm.jpg"
   },
   {
     username: "grumpy19",
     name: "Paul Grump",
-    avatar_url: "https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg"
+    avatar_url:
+      "https://vignette.wikia.nocookie.net/p__/images/8/86/Courage_the_Cowardly_Dog.png/revision/latest?cb=20191216063800&path-prefix=protagonist"
   },
   {
     username: "happyamy2016",
     name: "Amy Happy",
     avatar_url:
-      "https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729"
+      "https://mpng.pngfly.com/20180805/pjb/kisspng-the-red-guy-chicken-cartoon-network-vector-graphic-majica-me-online-prodaja-majica-5b6763634d67b1.4296529615335023073171.jpg"
   },
   {
     username: "cooljmessy",
     name: "Peter Messy",
-    avatar_url: "https://i.imgur.com/WfX0Neu.jpg"
+    avatar_url:
+      "https://www.pinclipart.com/picdir/middle/33-338772_royalty-free-actor-clipart-old-businessman-johnny-bravo.png"
   },
   {
     username: "weegembump",
     name: "Gemma Bump",
-    avatar_url:
-      "https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg"
+    avatar_url: "https://i.dlpng.com/static/png/6375489_preview.png"
   },
   {
     username: "jessjelly",
     name: "Jess Jelly",
     avatar_url:
-      "https://s-media-cache-ak0.pinimg.com/564x/39/62/ec/3962eca164e60cf46f979c1f57d4078b.jpg"
+      "https://www.pinclipart.com/picdir/middle/2-24051_about-dexter-laboratory-png-clipart.png"
   }
 ];
