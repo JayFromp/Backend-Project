@@ -10,15 +10,14 @@ Enjoy.
 
 ## Getting started
 
-Clone this repo:
+To view the already hosted version of this api, please go to 'www.insertyourlinkhere.com'.
 
-```bash
+To run locally:
+
 git clone https://github.com/jayfromp/backend-project
-
 cd Backend-Project
-```
-The repo has a number of dependencies already specified in the Package.JSON file. Please use 'npm i' to install them.
 
+The repo has a number of dependencies already specified in the Package.JSON file. Please use 'npm i' to install them.
 
 ## Running migrations
  To run migrations for the test database, please use the scripts "npm run migrate-latest" & "npm run migrate-rollback". For the development database, please use "npm run migrate-latest:prod" & "npm run migrate-rollback:prod"
