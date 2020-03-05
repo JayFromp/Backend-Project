@@ -63,7 +63,7 @@ DELETE /api/comments/:comment_id
 
 ---
 
-Built With
+## Built With
 - express
 - axios
 - knex
@@ -73,8 +73,8 @@ Built With
 - chai
 
 
-Authors
+## Authors
 Jay Compson. 
 
-Acknowledgments
+## Acknowledgments
 A big thank you to all at Northcoders and the people who likely won't ever read this, but who have put the time into creating the libraries and frameworks which made this possible. 
