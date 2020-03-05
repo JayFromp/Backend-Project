@@ -10,7 +10,7 @@ Enjoy.
 
 ## Getting started
 
-To view the already hosted version of this api, please go to 'www.insertyourlinkhere.com'.
+To view the already hosted version of this api, please go to 'https://jay-nc-news-api.herokuapp.com/api'.
 
 To run locally:
 
